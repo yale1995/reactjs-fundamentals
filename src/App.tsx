@@ -1,3 +1,6 @@
+import './global.css'
+import { Header } from './components/header'
+
 export const App = () => {
-  return <h1>Hello World</h1>
+  return <Header />
 }
