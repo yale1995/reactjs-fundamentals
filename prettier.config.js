@@ -2,9 +2,9 @@ export default {
   printWidth: 80,
   tabWidth: 2,
   singleQuote: true,
-  trailingComma: "all",
-  arrowParens: "always",
+  trailingComma: 'all',
+  arrowParens: 'always',
   semi: false,
   bracketSpacing: true,
-  endOfLine: "auto",
+  endOfLine: 'auto',
 }
