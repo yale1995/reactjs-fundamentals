@@ -1,6 +1,9 @@
 import styles from './post.module.css'
+
 import { Comment } from './comment'
 import { Avatar } from './avatar'
+import { format, formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 type Author = {
   name: string
@@ -20,6 +23,17 @@ interface PostProps {
 }
 
 export const Post = ({ author, content, publishedAt }: PostProps) => {
+  const publishedDateFormatted = format(
+    publishedAt,
+    "d 'de' LLLL 'às' HH:mm'h'",
+    { locale: ptBR },
+  )
+
+  const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {
+    locale: ptBR,
+    addSuffix: true,
+  })
+
   return (
     <article className={styles.post}>
       <header>
@@ -32,10 +46,10 @@ export const Post = ({ author, content, publishedAt }: PostProps) => {
         </div>
 
         <time
-          title={publishedAt.toDateString()}
-          dateTime={publishedAt.toDateString()}
+          title={publishedDateFormatted}
+          dateTime={publishedAt.toISOString()}
         >
-          {publishedAt.toDateString()}
+          {publishedDateRelativeToNow}
         </time>
       </header>
 
