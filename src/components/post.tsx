@@ -2,36 +2,53 @@ import styles from './post.module.css'
 import { Comment } from './comment'
 import { Avatar } from './avatar'
 
-export const Post = () => {
+type Author = {
+  name: string
+  avatarUrl: string
+  role: string
+}
+
+type Content = {
+  type: string
+  text: string
+}
+
+interface PostProps {
+  author: Author
+  content: Content[]
+  publishedAt: Date
+}
+
+export const Post = ({ author, content, publishedAt }: PostProps) => {
   return (
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar src="https://github.com/yale1995.png" />
+          <Avatar src={author.avatarUrl} />
           <div className={styles.authorInfo}>
-            <strong>Yale Henrique</strong>
-            <span>Software Engineer</span>
+            <strong>{author.name}</strong>
+            <span>{author.role}</span>
           </div>
         </div>
 
-        <time title="11 de Maio às 11:15h'' " dateTime="2025-05-11 08:00:00">
-          Publicdo há 1h
+        <time
+          title={publishedAt.toDateString()}
+          dateTime={publishedAt.toDateString()}
+        >
+          {publishedAt.toDateString()}
         </time>
       </header>
 
       <div className={styles.content}>
-        <p>Fala galeraa 👋</p>
-        <p>
-          Acabei de subir mais um projeto no meu portifa. É um projeto que fiz
-          no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀
-        </p>
-        <p>
-          <a href="">jane.design/doctorcare</a>
-        </p>
-        <p>
-          <a href="">#novoprojeto</a> {'   '}
-          <a href="">#nlw</a> <a href="">#rocketseat</a>{' '}
-        </p>
+        {content.map((line) => {
+          return line.type === 'paragraph' ? (
+            <p key={line.text}>{line.text}</p>
+          ) : (
+            <p key={line.text}>
+              <a>{line.text}</a>
+            </p>
+          )
+        })}
       </div>
 
       <form className={styles.commentForm}>
