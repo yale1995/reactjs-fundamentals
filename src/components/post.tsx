@@ -1,5 +1,5 @@
-/* eslint-disable prettier/prettier */
 import styles from './post.module.css'
+import { Comment } from './comment'
 
 export const Post = () => {
   return (
@@ -29,20 +29,25 @@ export const Post = () => {
         </p>
         <p>
           <a href="">#novoprojeto</a> {'   '}
-          <a href="">#nlw</a> {' '} <a href="">#rocketseat</a>{' '}
+          <a href="">#nlw</a> <a href="">#rocketseat</a>{' '}
         </p>
       </div>
-
 
       <form className={styles.commentForm}>
         <strong>Deixe seu feedback</strong>
 
-        <textarea placeholder='Deixe um comentário'/>
+        <textarea placeholder="Deixe um comentário" />
 
         <footer>
-        <button type='submit'>Publicar</button>
+          <button type="submit">Publicar</button>
         </footer>
       </form>
+
+      <div className={styles.commentList}>
+        <Comment />
+        <Comment />
+        <Comment />
+      </div>
     </article>
   )
 }
