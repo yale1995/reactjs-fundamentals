@@ -4,6 +4,7 @@ import { Comment } from './comment'
 import { Avatar } from './avatar'
 import { format, formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { ChangeEvent, FormEvent, useState } from 'react'
 
 type Author = {
   name: string
@@ -23,6 +24,9 @@ interface PostProps {
 }
 
 export const Post = ({ author, content, publishedAt }: PostProps) => {
+  const [comments, setComments] = useState(['Post muito bacana, hein?'])
+  const [newCommentText, setNewCommentText] = useState('')
+
   const publishedDateFormatted = format(
     publishedAt,
     "d 'de' LLLL 'às' HH:mm'h'",
@@ -33,6 +37,16 @@ export const Post = ({ author, content, publishedAt }: PostProps) => {
     locale: ptBR,
     addSuffix: true,
   })
+
+  function handleCreateNewComment(event: FormEvent) {
+    event.preventDefault()
+    setComments([...comments, newCommentText])
+    setNewCommentText('')
+  }
+
+  function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>) {
+    setNewCommentText(event.target.value)
+  }
 
   return (
     <article className={styles.post}>
@@ -65,10 +79,15 @@ export const Post = ({ author, content, publishedAt }: PostProps) => {
         })}
       </div>
 
-      <form className={styles.commentForm}>
+      <form className={styles.commentForm} onSubmit={handleCreateNewComment}>
         <strong>Deixe seu feedback</strong>
 
-        <textarea placeholder="Deixe um comentário" />
+        <textarea
+          placeholder="Deixe um comentário"
+          name="comment"
+          value={newCommentText}
+          onChange={handleNewCommentChange}
+        />
 
         <footer>
           <button type="submit">Publicar</button>
@@ -76,9 +95,9 @@ export const Post = ({ author, content, publishedAt }: PostProps) => {
       </form>
 
       <div className={styles.commentList}>
-        <Comment />
-        <Comment />
-        <Comment />
+        {comments.map((comment) => (
+          <Comment key={comment} content={comment} />
+        ))}
       </div>
     </article>
   )
