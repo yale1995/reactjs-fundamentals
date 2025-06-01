@@ -4,7 +4,7 @@ import { Comment } from './comment'
 import { Avatar } from './avatar'
 import { format, formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react'
 
 type Author = {
   name: string
@@ -45,8 +45,25 @@ export const Post = ({ author, content, publishedAt }: PostProps) => {
   }
 
   function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>) {
+    event.target.setCustomValidity('')
     setNewCommentText(event.target.value)
   }
+
+  const handleNewCommentInvalid = (
+    event: InvalidEvent<HTMLTextAreaElement>,
+  ) => {
+    event.target.setCustomValidity('Este campo é obrigatório!')
+  }
+
+  function deleteComment(commentToDelete: string) {
+    const commentsWithoutDeletedOne = comments.filter(
+      (comment) => comment !== commentToDelete,
+    )
+
+    setComments(commentsWithoutDeletedOne)
+  }
+
+  const isNewCommentEmpty = newCommentText.length === 0
 
   return (
     <article className={styles.post}>
@@ -87,16 +104,24 @@ export const Post = ({ author, content, publishedAt }: PostProps) => {
           name="comment"
           value={newCommentText}
           onChange={handleNewCommentChange}
+          onInvalid={handleNewCommentInvalid}
+          required
         />
 
         <footer>
-          <button type="submit">Publicar</button>
+          <button type="submit" disabled={isNewCommentEmpty}>
+            Publicar
+          </button>
         </footer>
       </form>
 
       <div className={styles.commentList}>
         {comments.map((comment) => (
-          <Comment key={comment} content={comment} />
+          <Comment
+            key={comment}
+            content={comment}
+            onDeleteComment={deleteComment}
+          />
         ))}
       </div>
     </article>
